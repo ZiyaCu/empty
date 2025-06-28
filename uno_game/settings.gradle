@@ -1,0 +1,19 @@
+// settings.gradle (Groovy DSL)
+
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+rootProject.name = "UnoGame" // This name is for the Android project root (the 'uno_game' dir)
+include ':app' // This tells Gradle to look for an 'app' module in a subdirectory.
+               // This matches the structure where `app/build.gradle` exists.
