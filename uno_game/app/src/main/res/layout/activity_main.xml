@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:padding="8dp">
+
+    <!-- Network Controls Area -->
+    <LinearLayout
+        android:id="@+id/linearLayoutNetworkControls"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:paddingBottom="8dp">
+
+        <Button
+            android:id="@+id/buttonHostGame"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:text="Host Game" />
+
+        <Button
+            android:id="@+id/buttonDiscoverGames"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="Find Games" />
+        <Button
+            android:id="@+id/buttonDisconnect"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="Disconnect"
+            android:visibility="gone"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textViewConnectionStatus"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/linearLayoutNetworkControls"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Status: Idle"
+        android:gravity="center"
+        android:paddingBottom="8dp"/>
+
+
+    <!-- Opponent Player Areas (Simplified) -->
+    <TextView
+        android:id="@+id/textViewOpponent1Name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Opponent 1 (7 cards)"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/textViewOpponent2Name"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        android:padding="8dp"/>
+
+    <TextView
+        android:id="@+id/textViewOpponent2Name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Opponent 2 (7 cards)"
+        app:layout_constraintTop_toTopOf="@+id/textViewOpponent1Name"
+        app:layout_constraintStart_toEndOf="@+id/textViewOpponent1Name"
+        app:layout_constraintEnd_toStartOf="@+id/textViewOpponent3Name"
+        android:padding="8dp"
+        tools:visibility="gone"/> <!-- Initially gone, visible if 3+ players -->
+
+    <TextView
+        android:id="@+id/textViewOpponent3Name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Opponent 3 (7 cards)"
+        app:layout_constraintTop_toTopOf="@+id/textViewOpponent1Name"
+        app:layout_constraintStart_toEndOf="@+id/textViewOpponent2Name"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="8dp"
+        tools:visibility="gone"/> <!-- Initially gone, visible if 4 players -->
+
+    <!-- Game Piles Area -->
+    <LinearLayout
+        android:id="@+id/linearLayoutPiles"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/textViewOpponent1Name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/imageViewDrawPile"
+            android:layout_width="80dp"
+            android:layout_height="120dp"
+            android:layout_marginEnd="16dp"
+            android:background="#CCCCCC"
+            android:contentDescription="Draw Pile"
+            android:src="@drawable/ic_card_back" /> <!-- Placeholder for card back drawable -->
+
+        <ImageView
+            android:id="@+id/imageViewDiscardPile"
+            android:layout_width="80dp"
+            android:layout_height="120dp"
+            android:layout_marginStart="16dp"
+            android:background="#AAAAAA"
+            android:contentDescription="Discard Pile"
+            android:src="@drawable/ic_card_placeholder" /> <!-- Placeholder for top card or generic placeholder -->
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textViewCurrentTurnInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Current Turn: Your Turn"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutPiles"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:textSize="16sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/textViewChosenWildColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Wild Color: NONE"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCurrentTurnInfo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        android:textSize="14sp"/>
+
+    <!-- Local Player's Hand -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewPlayerHand"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonDrawCard"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_card" />
+
+    <!-- Action Buttons -->
+    <Button
+        android:id="@+id/buttonDrawCard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Draw Card"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/buttonUno"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"/>
+
+    <Button
+        android:id="@+id/buttonUno"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="UNO!"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/buttonDrawCard"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"/>
+
+    <!-- Wild Color Picker (Initially Hidden) -->
+    <LinearLayout
+        android:id="@+id/linearLayoutWildColorPicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:background="#AAFFFFFF"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <Button android:id="@+id/buttonPickRed" android:layout_width="50dp" android:layout_height="50dp" android:backgroundTint="@android:color/holo_red_dark" android:layout_margin="4dp" />
+        <Button android:id="@+id/buttonPickGreen" android:layout_width="50dp" android:layout_height="50dp" android:backgroundTint="@android:color/holo_green_dark" android:layout_margin="4dp" />
+        <Button android:id="@+id/buttonPickBlue" android:layout_width="50dp" android:layout_height="50dp" android:backgroundTint="@android:color/holo_blue_dark" android:layout_margin="4dp" />
+        <Button android:id="@+id/buttonPickYellow" android:layout_width="50dp" android:layout_height="50dp" android:backgroundTint="@android:color/holo_orange_dark" android:layout_margin="4dp" /> <!-- Using orange for yellow -->
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textViewGameLog"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:scrollbars="vertical"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerViewPlayerHand"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewChosenWildColor"
+        tools:text="Game Started...\nPlayer 1 drew a card." />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
